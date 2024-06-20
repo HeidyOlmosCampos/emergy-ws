@@ -23,7 +23,16 @@ class ChargeCtrl {
         const todos = await Charge.findAll();
         return todos;
     } catch (error) {
-        throw new Error('Error al obtener todos: ' + error.message);
+        throw new Error('Error al obtener: ' + error.message);
+    }
+  };
+
+  obtenerPrimero = async () => {
+    try {
+        const todos = await Charge.findOne();
+        return todos;
+    } catch (error) {
+        throw new Error('Error al obtener: ' + error.message);
     }
   };
 

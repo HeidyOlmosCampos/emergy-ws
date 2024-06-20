@@ -1,9 +1,12 @@
 const express = require('express');
-const UserCtrl = require('../controllers/userCtrl');
+const AttendCtrl = require('../controllers/attendCtrl');
+const multer = require('multer');
 
 const router = express.Router();
 
 
-router.get('/', (req, res) => UserCtrl.getAll(req, res));
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+router.post('/create-by-image', upload.single('image'), (req, res) => AttendCtrl.createByImage(req, res));
 
 module.exports = router;

@@ -26,6 +26,7 @@ app.use(bodyparser.json({ limit: "15mb" }));
 app.use("/image", require("./src/routes/imagenRoute"));
 app.use("/charge", require("./src/routes/chargeRoute"));
 app.use("/user", require("./src/routes/userRoute"));
+app.use("/attend", require("./src/routes/attendRoute"));
 
 // Start Server
 const startServer = async () => {

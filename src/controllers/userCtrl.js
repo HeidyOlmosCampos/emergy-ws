@@ -18,7 +18,7 @@ class UserCtrl {
 
   obtenerTodos = async () => {
     try {
-        const todos = await User.findAll();
+      const todos = await User.findAll();
         return todos;
     } catch (error) {
         throw new Error('Error al obtener todos: ' + error.message);

@@ -23,13 +23,13 @@ function compararRostros(sourceImage, targetImage) {
     SourceImage: {
       S3Object: {
         Bucket: bucketName,
-        Name: sourceImage, // Nombre del archivo de la imagen fuente en S3
+        Name: targetImage, // Nombre del archivo de la imagen fuente en S3
       },
     },
     TargetImage: {
       S3Object: {
         Bucket: bucketName,
-        Name: targetImage, // Nombre del archivo de la imagen objetivo en S3
+        Name: sourceImage, // Nombre del archivo de la imagen objetivo en S3
       },
     },
     SimilarityThreshold: 0 // Establece la sensibilidad a 0
@@ -45,6 +45,7 @@ function compararRostros(sourceImage, targetImage) {
         if (faceMatches.length === 0) {
           resolve(0);
         } else {
+          console.log(faceMatches);
           const similarity = faceMatches[0].Similarity;
           resolve(similarity);
         }

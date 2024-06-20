@@ -31,7 +31,9 @@ class ActionCtrl {
         });
       }
 
-      res.status(200).send("cargados correctamente");
+      const todos = await this.obtenerTodosPorEmergenciaId(emergency_id);
+
+      res.status(200).json(todos);
 
     }catch (error){
       console.log(error);
@@ -42,9 +44,9 @@ class ActionCtrl {
   async getAllByEmergencyId(req, res){
     try{
       const { emergency_id } = req.params;
-      const usuarios = await this.obtenerTodosPorEmergenciaId(emergency_id);
+      const todos = await this.obtenerTodosPorEmergenciaId(emergency_id);
 
-      res.status(200).send(usuarios);
+      res.status(200).send(todos);
 
     }catch (error){
       console.log(error);

@@ -37,7 +37,6 @@ class AttendCtrl {
 
       const usuarios = await UserCtrl.obtenerTodos();
       const cargoDefecto = await ChargeCtrl.obtenerPrimero();
-      var array = [];
       for (const usuario of usuarios) {
         const targetImage = usuario.url_image.split('/').pop();  
         const esUsuarioExistente = await this.existeUsuarioEnEmergencia(emergencyId, usuario.id);
@@ -50,14 +49,15 @@ class AttendCtrl {
               emergency_id : emergencyId,
               charge_id : cargoDefecto.id,
             });
-            array.push(nuevoAttend);
           }
         }
       }
-      res.status(200).send(array);
+
+      const usuariosXEmergencia = await this.obtenerUsuariosPorEmergencia(emergency_id)
+      res.status(200).send(usuariosXEmergencia);
     }catch (error){
       console.log(error);
-      res.status(500).send("Error al cargar la imagen");
+      res.status(500).json("Error al cargar la imagen");
     }
   }
 

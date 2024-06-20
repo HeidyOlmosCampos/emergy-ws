@@ -27,6 +27,8 @@ app.use("/image", require("./src/routes/imagenRoute"));
 app.use("/charge", require("./src/routes/chargeRoute"));
 app.use("/user", require("./src/routes/userRoute"));
 app.use("/attend", require("./src/routes/attendRoute"));
+app.use("/action", require("./src/routes/actionRoute"));
+
 
 // Start Server
 const startServer = async () => {

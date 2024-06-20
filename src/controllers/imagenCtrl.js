@@ -65,7 +65,7 @@ class ImagenCtrl {
   }
 
 
-  async obtenerUrlDeImgEmergencia(req, res){
+  async obtenerUrlsDeImgEmergencia(req, res){
     try {
       const { emergency_id } = req.params;
       const urls = await this.obtenerUrlPorEmercenciaId(emergency_id);

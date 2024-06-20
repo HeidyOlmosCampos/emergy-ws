@@ -25,6 +25,18 @@ class UserCtrl {
     }
   };
 
+  async buscarPorId(userId) {
+    try {
+      const usuario = await User.findByPk(userId);
+      if (!usuario) {
+        throw new Error(`Usuario con id ${userId} no encontrado`);
+      }
+      return usuario;
+    } catch (error) {
+      throw new Error('Error al buscar usuario por id: ' + error.message);
+    }
+  }
+
 }
 
 

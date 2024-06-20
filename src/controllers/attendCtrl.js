@@ -1,21 +1,22 @@
 const Attend = require('../models/attend');
+const User = require('../models/user'); // Asegúrate de importar tus modelos correctamente
 const ChargeCtrl = require('./chargeCtrl');
 const UserCtrl = require('./userCtrl');
 const moment = require('moment');
+
 const {subirImagenABucket, compararRostros} = require('../services/aws');
 
 class AttendCtrl {
   constructor() {}
 
-  async getAll(req, res){
+  async getAttendsByEmergencyId(req, res){
     try{
-      // const usuarios = await this.obtenerTodos();
-
-      // res.status(200).send(usuarios);
-
+      const { emergency_id } = req.params;
+      const usuariosXEmergencia = await this.obtenerUsuariosPorEmergencia(emergency_id)
+      res.status(200).send(usuariosXEmergencia);
     }catch (error){
       console.log(error);
-      res.status(500).send("Error al cargar la imagen");
+      res.status(500).send("Error al obtener " + error.message);
     }
   }
 
@@ -38,7 +39,7 @@ class AttendCtrl {
       const cargoDefecto = await ChargeCtrl.obtenerPrimero();
       var array = [];
       for (const usuario of usuarios) {
-        const targetImage = usuario.url.split('/').pop();  
+        const targetImage = usuario.url_image.split('/').pop();  
         const esUsuarioExistente = await this.existeUsuarioEnEmergencia(emergencyId, usuario.id);
         if (!esUsuarioExistente) {
           const coincidencia = await compararRostros(sourceImage, targetImage);
@@ -53,10 +54,7 @@ class AttendCtrl {
           }
         }
       }
-  
-
       res.status(200).send(array);
-
     }catch (error){
       console.log(error);
       res.status(500).send("Error al cargar la imagen");
@@ -90,14 +88,37 @@ class AttendCtrl {
 
   existeUsuarioEnEmergencia = async (emergency_id, user_id) => {
     try {
-      const todos = await Attend.findAll({
-        where: {emergency_id, user_id}
+      const existeUsuario = await Attend.findOne({
+        where: {
+          emergency_id: emergency_id,
+          user_id: user_id
+        }
       });
-      return !!todos;
+      return existeUsuario !== null; 
     } catch (error) {
-      throw new Error('Error al obtener: ' + error.message);
+      throw new Error('Error al verificar existencia de usuario en emergencia: ' + error.message);
     }
   };
+
+
+  async obtenerUsuariosPorEmergencia(emergency_id) {
+    try {
+      const attends = await Attend.findAll({
+        where: { emergency_id: emergency_id }
+      });
+
+      var usuarios = [];
+      for (const attend of attends) {
+        const nuevo = await UserCtrl.buscarPorId(attend.user_id);
+        usuarios.push(nuevo);
+      }
+
+      return usuarios;
+    } catch (error) {
+      throw new Error('Error al verificar: ' + error.message);
+    }
+  }
+
 
 }
 

@@ -34,7 +34,7 @@ const startServer = async () => {
     await dbConnection();
     await syncModels();
     server.listen(app.get("port"), '0.0.0.0', () => {
-      console.log("Taller mecanico servicio en el puerto ", app.get("port"));
+      console.log("Emergy servicio en el puerto ", app.get("port"));
     });
 
   } catch (error) {

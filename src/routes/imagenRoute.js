@@ -14,7 +14,7 @@ router.post('/emergency-upload', upload.single('image'), (req, res) => ImagenCtr
 
 router.post('/compare', (req, res) => ImagenCtrl.compararRostros(req, res));
 
-router.get('/emergency-urls/:emergency_id', (req, res) => ImagenCtrl.obtenerUrlDeImgEmergencia(req, res));
+router.get('/emergency-urls/:emergency_id', (req, res) => ImagenCtrl.obtenerUrlsDeImgEmergencia(req, res));
 
 
 

@@ -11,7 +11,7 @@ class AttendCtrl {
 
   async getAttendsByEmergencyId(req, res){
     try{
-      const { emergency_id } = req.params;
+      const emergency_id = req.params.emergency_id;
       const usuariosXEmergencia = await this.obtenerUsuariosPorEmergencia(emergency_id)
       res.status(200).send(usuariosXEmergencia);
     }catch (error){
@@ -23,7 +23,7 @@ class AttendCtrl {
   async createByImage(req, res){
     try{
       const imagen = req.file.buffer;
-      const emergencyId = req.body.emergencyId;
+      const emergency_id = req.body.emergency_id;
       const sourceImage = `${Date.now()}_${req.file.originalname}`;
       var imgURL = "";
       await subirImagenABucket(imagen, sourceImage)
@@ -39,14 +39,14 @@ class AttendCtrl {
       const cargoDefecto = await ChargeCtrl.obtenerPrimero();
       for (const usuario of usuarios) {
         const targetImage = usuario.url_image.split('/').pop();  
-        const esUsuarioExistente = await this.existeUsuarioEnEmergencia(emergencyId, usuario.id);
+        const esUsuarioExistente = await this.existeUsuarioEnEmergencia(emergency_id, usuario.id);
         if (!esUsuarioExistente) {
           const coincidencia = await compararRostros(sourceImage, targetImage);
           if (coincidencia > 87){
             const nuevoAttend = await Attend.create({
               date : moment().format('YYYY-MM-DD'),
               user_id : usuario.id,
-              emergency_id : emergencyId,
+              emergency_id : emergency_id,
               charge_id : cargoDefecto.id,
             });
           }

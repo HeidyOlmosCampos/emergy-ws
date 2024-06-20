@@ -1,5 +1,4 @@
 const Action = require('../models/action');
-const moment = require('moment');
 const {textoABitacora} = require('../services/geminiAi')
 
 class ActionCtrl {
@@ -12,25 +11,24 @@ class ActionCtrl {
       var resultado = "";
       if(promtEntrante.length > 5){
         resultado = await textoABitacora(promtEntrante);
+  
+        const partes1 = resultado.split('@');
+        console.log(partes1.toString());
+        for(const part of partes1) {
+          const partesEvento = part.split('_');
+          const fecha = partesEvento[0]; // Formato "YYYY-MM-DD"
+          const hora = partesEvento[1] + ":00"; // Formato "HH:MM"
+          const descripcion = partesEvento.slice(2).join('_'); // Unir las partes restantes 
+          print(hora);
+
+          const nuevo = await Action.create({
+            date: fecha,
+            hour: hora,
+            description: descripcion,
+            emergency_id: emergency_id
+          });
+        }
       }
-
-      const partes1 = resultado.split('@');
-      for(const part of partes1) {
-        const partesEvento = part.split('_');
-        const fecha = partesEvento[0]; // Formato "YYYY-MM-DD"
-        const hora = partesEvento[1]; // Formato "HH:MM"
-        const descripcion = partesEvento.slice(2).join('_'); // Unir las partes restantes con '_'
-
-        const fechaHora = moment(`${fecha} ${hora}`, "YYYY-MM-DD HH:mm");
-
-        const nuevo = await Action.create({
-          date: fechaHora.format("YYYY-MM-DD"),
-          hour: fechaHora.format("HH:mm"),
-          description: descripcion,
-          emergency_id: emergency_id
-        });
-      }
-
       const todos = await this.obtenerTodosPorEmergenciaId(emergency_id);
 
       res.status(200).json(todos);

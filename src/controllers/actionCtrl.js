@@ -14,26 +14,24 @@ class ActionCtrl {
         resultado = await textoABitacora(promtEntrante);
         console.log(resultado);
         const partes1 = resultado.split('@');
-        console.log(partes1.toString());
         for(const part of partes1) {
           const partesEvento = part.split('_').map(item => item.trim()).filter(item => item !== ''); // Elimina espacios en blanco y elementos vacíos
 
-        if (partesEvento.length < 3) {
-          continue; // Si no hay suficientes elementos, pasa al siguiente bucle
-        }
+          if (partesEvento.length < 3) {
+            continue; // Si no hay suficientes elementos, pasa al siguiente bucle
+          }
 
-        const fecha = partesEvento[0]; // Formato "YYYY-MM-DD"
-        const hora = partesEvento[1] + ":00"; // Formato "HH:MM"
-        const descripcion = partesEvento.slice(2).join('_'); // Unir las partes restantes con '_'
+          const fecha = partesEvento[0]; // Formato "YYYY-MM-DD"
+          const hora = partesEvento[1] + ":00"; // Formato "HH:MM"
+          const descripcion = partesEvento.slice(2).join('_'); // Unir las partes restantes con '_'
 
-        const dateObject = new Date(fecha);
-
-        const nuevo = await Action.create({
-          date: dateObject,
-          hour: hora,
-          description: descripcion,
-          emergency_id: emergency_id
-        });
+          const dateObject = new Date(fecha);
+          const nuevo = await Action.create({
+            date: dateObject,
+            hour: hora,
+            description: descripcion,
+            emergency_id: emergency_id
+          });
         }
       }
       const todos = await this.obtenerTodosPorEmergenciaId(emergency_id);

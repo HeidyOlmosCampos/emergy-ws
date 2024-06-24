@@ -35,6 +35,7 @@ class ActionCtrl {
         }
       }
       const todos = await this.obtenerTodosPorEmergenciaId(emergency_id);
+      console.log(todos.toString());
 
       res.status(200).json(todos);
 

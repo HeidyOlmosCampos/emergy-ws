@@ -18,6 +18,11 @@ textoABitacora = async (promtEntrante) => {
     const response = await result.response;
     const text = response.text();
 
+    const validacion = "devuelveme solo la respuesta en el formato indicado, mas nada, nada de explicaciones ni nada";
+    if(text === validacion){
+      text = "";
+    }
+
     return text;
   } catch (error) {
       throw new Error('Error al obtener todos: ' + error.message);

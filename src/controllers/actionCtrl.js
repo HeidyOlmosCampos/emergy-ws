@@ -10,6 +10,7 @@ class ActionCtrl {
       const promtEntrante = req.body.promt;
       const emergency_id = req.body.emergency_id;
       var resultado = "";
+      var nuevos = [];
       if(promtEntrante.length > 5){
         resultado = await textoABitacora(promtEntrante);
         console.log(resultado);
@@ -32,12 +33,12 @@ class ActionCtrl {
             description: descripcion,
             emergency_id: emergency_id
           });
+          nuevos.push(nuevo);
         }
       }
-      const todos = await this.obtenerTodosPorEmergenciaId(emergency_id);
-      console.log(todos.toString());
+    //  const todos = await this.obtenerTodosPorEmergenciaId(emergency_id);
 
-      res.status(200).json(todos);
+      res.status(200).json(nuevos);
 
     }catch (error){
       console.log(error);
